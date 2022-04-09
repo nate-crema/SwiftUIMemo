@@ -15,20 +15,7 @@ struct MainListView: View {
     var body: some View {
         NavigationView { // Cmd + Shift + A -> embed => NavigationView
             List(store.list) { memo in
-                VStack(alignment: .leading) {// Cmd + Shift + A -> embed in VStack
-                    /*
-                     VStack: Vertical Stack
-                     => 포함된 View를 수직으로 나란히 배치
-                     => 수평으로는 가운데 정렬이 default (좌측정렬: alignment: .leading)
-                     */
-                    Text(memo.content)
-                        .font(.body) // font style
-                        .lineLimit(1) // 메모 내용을 1줄만 표시. 길경우 자동 생략
-                    
-                    Text(memo.insertDate, style: .date)
-                        .font(.caption)
-                        .foregroundColor(.secondary) // font color
-                }
+                MemoCell(memo: memo)
             }
             .listStyle(.plain)
             .navigationTitle("내 메모")
