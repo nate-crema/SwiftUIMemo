@@ -10,6 +10,8 @@ import SwiftUI
 struct ComposeView: View {
     @EnvironmentObject var store: MemoStore
     
+    var memo: Memo? = nil
+    
     @Environment(\.dismiss) var dismiss
     
     @State private var content: String = "" // State Variable
@@ -19,8 +21,14 @@ struct ComposeView: View {
             VStack {
                 TextEditor(text: $content) // to-A binding 방식
                     .padding()
+                    .onAppear {
+                        // TextEditor의 초기값 내용
+                        if let memo = memo {
+                            content = memo.content
+                        }
+                    }
             }
-            .navigationTitle("새 메모") // navigation title
+            .navigationTitle(memo != nil ? "메모 편집" : "새 메모") // navigation title
             .navigationBarTitleDisplayMode(.inline) // navigation title mode: inline -> large title mode disable
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarLeading) { // Leading: 왼쪽
@@ -33,7 +41,11 @@ struct ComposeView: View {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     // Trailing: 오른쪽
                     Button {
-                        store.insert(memo: content)
+                        if let memo = memo {
+                            store.update(memo: memo, content: content)
+                        } else {
+                            store.insert(memo: content)
+                        }
                         
                         dismiss() // Button function
                     } label: {
