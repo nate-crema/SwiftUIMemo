@@ -16,13 +16,16 @@ struct MainListView: View {
     
     var body: some View {
         NavigationView { // Cmd + Shift + A -> embed => NavigationView
-            List(store.list) { memo in
-                // push 방식 화면 display
-                NavigationLink {
-                    DetailView(memo: memo)
-                } label: {
-                    MemoCell(memo: memo)
+            List {
+                ForEach(store.list) { memo in
+                    // push 방식 화면 display
+                    NavigationLink {
+                        DetailView(memo: memo)
+                    } label: {
+                        MemoCell(memo: memo)
+                    }
                 }
+                .onDelete(perform: store.delete)
             }
             .listStyle(.plain)
             .navigationTitle("내 메모")
